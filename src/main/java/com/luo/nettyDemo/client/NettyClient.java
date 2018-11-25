@@ -1,6 +1,6 @@
 package com.luo.nettyDemo.client;
 
-import com.luo.nettyDemo.message.FirstClientHandler;
+import com.luo.nettyDemo.message.ClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -28,7 +28,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new FirstClientHandler());
+                        ch.pipeline().addLast(new ClientHandler());
                     }
                 });
         connect(bootstrap, "127.0.0.1", 8000, MAX_RETRY);

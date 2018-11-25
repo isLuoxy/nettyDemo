@@ -1,6 +1,6 @@
 package com.luo.nettyDemo.server;
 
-import com.luo.nettyDemo.message.FirstServerHandler;
+import com.luo.nettyDemo.message.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -21,7 +21,7 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new FirstServerHandler());
+                    ch.pipeline().addLast(new ServerHandler());
                     }
                 });
         bind(serverBootstrap,8000);

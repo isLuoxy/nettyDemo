@@ -1,12 +1,14 @@
 package com.luo.nettyDemo.protocol;
 
 import com.luo.nettyDemo.protocol.request.LoginRequestPacket;
+import com.luo.nettyDemo.protocol.response.LoginResponsePacket;
 import com.luo.nettyDemo.serialize.Serializer;
 import com.luo.nettyDemo.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 
 import static com.luo.nettyDemo.protocol.command.Command.LOGIN_REQUEST;
+import static com.luo.nettyDemo.protocol.command.Command.LOGIN_RESPONSE;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +17,8 @@ import java.util.Map;
  *  编解码器
  */
 public class PacketCodec {
+
+    public static final PacketCodec INSTANCE = new PacketCodec();
 
     /**
      * 定义魔数
@@ -37,6 +41,7 @@ public class PacketCodec {
     public PacketCodec() {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
+        packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
