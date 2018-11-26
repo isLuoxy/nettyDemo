@@ -3,10 +3,13 @@ package com.luo.nettyDemo.message;
 import com.luo.nettyDemo.protocol.Packet;
 import com.luo.nettyDemo.protocol.PacketCodec;
 import com.luo.nettyDemo.protocol.request.LoginRequestPacket;
+import com.luo.nettyDemo.protocol.request.MessageRequestPacket;
 import com.luo.nettyDemo.protocol.response.LoginResponsePacket;
+import com.luo.nettyDemo.protocol.response.MessageResponsePacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import sun.plugin2.message.Message;
 
 import java.util.Date;
 
@@ -14,7 +17,6 @@ import java.util.Date;
 public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println(new Date() + " 客户端开始登录");
         ByteBuf requestByteBuf = (ByteBuf) msg;
 
         // 解码
@@ -42,7 +44,15 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             // 把登录对象发送给客户端
             ByteBuf responseBuffer = PacketCodec.INSTANCE.encode(ctx.alloc(), loginResponsePacket);
             ctx.channel().writeAndFlush(responseBuffer);
-
+        } else if (packet instanceof MessageRequestPacket) {
+            // 如果是客户端发送的消息
+            MessageRequestPacket messageRequestPacket = (MessageRequestPacket) packet;
+            // 建立一个服务端发送消息对象
+            MessageResponsePacket messageResponsePacket = new MessageResponsePacket();
+            System.out.println(new Date() + " 服务器收到客户端发来的信息：" + messageRequestPacket.getMessage());
+            messageResponsePacket.setMessage("【服务器已收到消息:" + messageRequestPacket.getMessage() + " 】");
+            ByteBuf messageResponseByteBuf = PacketCodec.INSTANCE.encode(ctx.alloc(), messageResponsePacket);
+            ctx.channel().writeAndFlush(messageResponseByteBuf);
         }
     }
 

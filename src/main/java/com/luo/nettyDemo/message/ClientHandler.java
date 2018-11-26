@@ -4,9 +4,12 @@ import com.luo.nettyDemo.protocol.Packet;
 import com.luo.nettyDemo.protocol.PacketCodec;
 import com.luo.nettyDemo.protocol.request.LoginRequestPacket;
 import com.luo.nettyDemo.protocol.response.LoginResponsePacket;
+import com.luo.nettyDemo.protocol.response.MessageResponsePacket;
+import com.luo.nettyDemo.util.LoginUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import sun.plugin2.message.Message;
 
 import java.util.Date;
 import java.util.UUID;
@@ -41,10 +44,15 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
             LoginResponsePacket loginResponsePacket = (LoginResponsePacket) packet;
 
             if (loginResponsePacket.isSuccess()) {
+                /* 设置登录标志 */
+                LoginUtil.markAsLogin(ctx.channel());
                 System.out.println(new Date() + " 客户端登录成功");
             } else {
                 System.out.println(new Date() + " 客户端登录失败，原因是：" + loginResponsePacket.getReason());
             }
+        } else if (packet instanceof MessageResponsePacket) {
+            MessageResponsePacket messageResponsePacket = (MessageResponsePacket) packet;
+            System.out.println(new Date() + " 收到服务端发送的消息：" + messageResponsePacket.getMessage());
         }
     }
 }

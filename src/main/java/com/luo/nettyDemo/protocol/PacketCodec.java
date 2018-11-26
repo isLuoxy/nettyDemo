@@ -1,17 +1,18 @@
 package com.luo.nettyDemo.protocol;
 
 import com.luo.nettyDemo.protocol.request.LoginRequestPacket;
+import com.luo.nettyDemo.protocol.request.MessageRequestPacket;
 import com.luo.nettyDemo.protocol.response.LoginResponsePacket;
+import com.luo.nettyDemo.protocol.response.MessageResponsePacket;
 import com.luo.nettyDemo.serialize.Serializer;
 import com.luo.nettyDemo.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 
-import static com.luo.nettyDemo.protocol.command.Command.LOGIN_REQUEST;
-import static com.luo.nettyDemo.protocol.command.Command.LOGIN_RESPONSE;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.luo.nettyDemo.protocol.command.Command.*;
 
 /**
  *  编解码器
@@ -42,6 +43,8 @@ public class PacketCodec {
         packetTypeMap = new HashMap<>();
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
         Serializer serializer = new JSONSerializer();
