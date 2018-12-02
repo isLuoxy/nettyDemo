@@ -53,13 +53,14 @@ public class PacketCodec {
 
     /**
      * 编码
-     * @param byteBufAllocator  netty 的 ByteBuf 分配器
+     * @param // byteBufAllocator  netty 的 ByteBuf 分配器
+     * @Param byteBuf 数据传输媒体
      * @param packet 传输对象
      * @return ByteBuf
      */
-    public ByteBuf encode(ByteBufAllocator byteBufAllocator, Packet packet) {
+    public ByteBuf encode(ByteBuf byteBuf, Packet packet) {
         // 创建 ByteBuf 对象，利用ioBuffer() 方法会返回适配 io 读写相关的内存，它会尽可能创建一个直接内存
-        ByteBuf byteBuf = byteBufAllocator.ioBuffer();
+        // ByteBuf byteBuf = byteBufAllocator.ioBuffer();
 
         // 序列化 java 对象
         byte[] bytes = Serializer.DEFAULT.serializer(packet);
