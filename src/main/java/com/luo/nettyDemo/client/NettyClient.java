@@ -1,9 +1,11 @@
 package com.luo.nettyDemo.client;
 
+import com.luo.nettyDemo.client.handler.FirstClientHandler;
 import com.luo.nettyDemo.client.handler.LoginResponseHandler;
 import com.luo.nettyDemo.client.handler.MessageResponseHandler;
 import com.luo.nettyDemo.codec.PacketDecoder;
 import com.luo.nettyDemo.codec.PacketEncoder;
+import com.luo.nettyDemo.codec.Spliter;
 import com.luo.nettyDemo.protocol.PacketCodec;
 import com.luo.nettyDemo.protocol.request.MessageRequestPacket;
 import com.luo.nettyDemo.util.LoginUtil;
@@ -43,6 +45,8 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
+                        //  ch.pipeline().addLast(new FirstClientHandler());
+                        ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());

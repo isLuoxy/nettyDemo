@@ -2,6 +2,8 @@ package com.luo.nettyDemo.server;
 
 import com.luo.nettyDemo.codec.PacketDecoder;
 import com.luo.nettyDemo.codec.PacketEncoder;
+import com.luo.nettyDemo.codec.Spliter;
+import com.luo.nettyDemo.server.handler.FirstServerHandler;
 import com.luo.nettyDemo.server.handler.LoginRequestHandler;
 import com.luo.nettyDemo.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -12,10 +14,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 
-
 public class NettyServer {
 
     static final int PORT = 8000;
+
     public static void main(String[] args) {
         NioEventLoopGroup bossGroup = new NioEventLoopGroup();
         NioEventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -29,13 +31,15 @@ public class NettyServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(new PacketDecoder());
-                    ch.pipeline().addLast(new LoginRequestHandler());
-                    ch.pipeline().addLast(new MessageRequestHandler());
-                    ch.pipeline().addLast(new PacketEncoder());
+                        //                  ch.pipeline().addLast(new FirstServerHandler());
+                        ch.pipeline().addLast(new Spliter());
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginRequestHandler());
+                        ch.pipeline().addLast(new MessageRequestHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
-        bind(serverBootstrap,PORT);
+        bind(serverBootstrap, PORT);
     }
 
     public static void bind(ServerBootstrap serverBootstrap, int port) {
